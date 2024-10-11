@@ -2,6 +2,8 @@ import React,{useState,useEffect} from "react";
 import Grid from  "@mui/material/Grid2";
 import MovieCard from '../components/movieList'
 import MovieList from "../components/movieList";
+import FilterCard from "../components/filterMoviesCard";
+import Header from "../components/headerMovieList";
 
 const HomePage = (props) => {
     const [movies, setMovies] = useState([]);
@@ -19,16 +21,18 @@ const HomePage = (props) => {
         setMovies(movies);
       });
   }, []);
+
+
     return (
         <Grid container>
             <Grid size={12}>
-                <h1>HomePage</h1>
+                <Header title={"Home Page"}/>
             </Grid>   
-            <Grid container>
-                <MovieList movies={movies}>
-
-                </MovieList>
-            
+            <Grid container sx={{flex:"1 1 500px"}}>
+                <Grid key="find" size={{xs:12 , sm:6 ,md:4,lg:3,xl:2}} sx={{padding:"20px"}}>
+                    <FilterCard/>
+                </Grid>
+                <MovieList movies={movies}></MovieList>
             </Grid> 
         </Grid>
     );
