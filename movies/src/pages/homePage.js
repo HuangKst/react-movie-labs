@@ -20,7 +20,9 @@ const HomePage = (props) => {
       .then((movies) => {
         setMovies(movies);
       });
-  }, []);
+  }, [
+     
+  ]);
 
 
     return (
