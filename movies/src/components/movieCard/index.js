@@ -17,7 +17,7 @@ import Avatar from '@mui/material/Avatar';
 import { MoviesContext } from "../../contexts/moviesContext";
 
 
-export default function MovieCard({ movie, action }) {
+export default function MovieCard({ movie, action = () => {} }) {
   const { favorites, addToFavorites } = useContext(MoviesContext);
 
   if (favorites.find((id) => id === movie.id)) {
