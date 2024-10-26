@@ -19,13 +19,7 @@ const UpcomingPage = (props) => {
     const movies = data.results;
   
 
-  // return (
-  //   <PageTemplate
-  //     title='Discover Movies'
-  //     movies={movies}
-  //     selectFavorite={addToFavorites}
-  //   />
-  // );
+
   return (
     <PageTemplate
       title="Upcoming Movies"

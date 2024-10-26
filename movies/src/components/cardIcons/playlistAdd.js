@@ -7,8 +7,8 @@ const PlayListAddIcon =({movie})=>{
     const context = useContext(MoviesContext);
 
     const handlePlayListAdd = (e) =>{
-        e.prevementDefault();
-        context.playListAdd(movie);
+        context.addMovieToPlayList(movie);
+        console.log("PlayList: " + context.playList)
     };
     return(
         <IconButton aria-label="play list add " onClick={handlePlayListAdd}>

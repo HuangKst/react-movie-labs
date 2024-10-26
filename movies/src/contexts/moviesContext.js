@@ -24,18 +24,17 @@ const MoviesContextProvider = (props) => {
   };
 
   
-  //play list add
-  const playListAdd = (movie) =>{
-    let movielist=[];
-    if (!playList.includes(movie.id)){
-      movielist= [...playList, movie.id];
+  const addMovieToPlayList = (movie) => {
+    let newPlayList = [];
+    if (!playList.includes(movie.id)) {
+      newPlayList = [...playList, movie.id];
     }
-    else{
-      movielist = [...playList];
+    else {
+      newPlayList = [...playList];
     }
-    setPlayList(movielist);
+    setPlayList(newPlayList)
+  };
 
-  }
   
   // We will use this function in the next step
   const removeFromFavorites = (movie) => {
@@ -51,7 +50,8 @@ const MoviesContextProvider = (props) => {
         addToFavorites,
         removeFromFavorites,
         addReview,
-        playListAdd,
+        addMovieToPlayList,
+        playList,
       }}
     >
       {props.children}
