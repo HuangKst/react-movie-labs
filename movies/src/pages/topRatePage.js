@@ -27,9 +27,7 @@ const TopRatePage = () => {
       movies={movies}
       action={(movie)=>{
         return<PlayListAddIcon movie={movie}/>
-      }}
-     
-      
+      }} 
     />
 );
 };

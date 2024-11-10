@@ -38,6 +38,7 @@ const App = () => {
             <Route path="/reviews/form" element={ <AddMovieReviewPage /> } />
             <Route path="/movies/upcoming" element={<UpcomingPage/>} />
             <Route path="/movies/top_rate" element={<TopRatePage/>}/>
+            <Route path="/credits/:id" />
           </Routes>
         </MoviesContextProvider>
       </BrowserRouter>
