@@ -10,7 +10,7 @@ const CreditItem = ({ cast }) => {
   
   return (
     <Grid item xs={6} sm={4} md={3} lg={2}>
-      <Card sx={{ maxWidth: 150, textAlign: 'center', margin: '0 auto' }}>
+      <Card sx={{ maxWidth: 150, height: 300, textAlign: 'center', margin: '0 auto' }}>
         <CardMedia
           component="img"
           height="200"
@@ -28,9 +28,7 @@ const CreditItem = ({ cast }) => {
           <Typography variant="body2" color="text.secondary">
             {cast.character}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {cast.episode_count ? `${cast.episode_count} Episodes` : ""}
-          </Typography>
+          
         </CardContent>
       </Card>
     </Grid>
