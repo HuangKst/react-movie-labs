@@ -4,10 +4,10 @@ import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
 import PlayListAddIcon from "../components/cardIcons/playlistAdd";
-
+import AddToFavoritesIcon from '../components/cardIcons/addToFavorites'
 const TopRatePage = () => {
 
-    const {  data, error, isLoading, isError }  = useQuery('discover', getTopRateMovies)
+    const {  data, error, isLoading, isError }  = useQuery('TopRatedMovies', getTopRateMovies)
 
     if (isLoading) {
       return <Spinner />
@@ -18,6 +18,8 @@ const TopRatePage = () => {
     }
 
     const movies = data.results;
+    const favorites = movies.filter(m => m.favorite);
+    localStorage.setItem('favorites', JSON.stringify(favorites));
   
 
 
@@ -26,7 +28,14 @@ const TopRatePage = () => {
       title="Top Rated Movies"
       movies={movies}
       action={(movie)=>{
-        return<PlayListAddIcon movie={movie}/>
+        return(
+          <div>
+                <PlayListAddIcon movie={movie}/>
+                <AddToFavoritesIcon movie={movie}/>
+          </div>
+        )
+                
+
       }} 
     />
 );
