@@ -21,7 +21,9 @@ const CreditsPage = () => {
         <>
           {credits ? (
             <>
-              <CreditsSlider data={credits} />
+              <CreditsSlider data={credits}>
+                
+              </CreditsSlider>
             </>
           ) : (
             <p>Waiting for movie details</p>

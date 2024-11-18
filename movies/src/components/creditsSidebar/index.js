@@ -7,6 +7,7 @@ const CreditsSlider = ({ data }) => {
     return (
       <>
       <CreditHeader credit={data}/>
+      
       <Card sx={{ width: 300, padding: 2, borderRadius: 3, boxShadow: 3 }}>
         <Box display="flex" justifyContent="center">
           <Avatar src={`https://image.tmdb.org/t/p/w300${data.profile_path}`} alt={data.name} sx={{ width: 100, height: 100 }} />

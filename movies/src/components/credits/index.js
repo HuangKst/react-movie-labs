@@ -16,7 +16,7 @@ const CreditItem = ({ cast }) => {
           <Link to={`/credits/${cast.id}`}>
           <CardMedia
             component="img"
-            height="200"
+            height="180"
             image={
               cast.profile_path 
                 ? `https://image.tmdb.org/t/p/w500/${cast.profile_path}` 

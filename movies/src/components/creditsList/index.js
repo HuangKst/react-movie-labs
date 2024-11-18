@@ -1,25 +1,78 @@
-// components/CreditsList.js
-import React from 'react';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import CreditItem from '../credits';
+import React from "react";
+import Slider from "react-slick";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import CreditItem from "../credits";
+import Button from "@mui/material/Button";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+
 
 const CreditsList = ({ credits }) => {
   if (!credits || credits.length === 0) {
-    return <Typography variant="body2">No cast information available.</Typography>;
+    return (
+      <Typography variant="body2">No cast information available.</Typography>
+    );
   }
 
+  // React Slick settings
+  const settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 5, // 控制每页显示多少演员
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 4,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+    ],
+  };
+
   return (
-    <div style={{ padding: "15px" }}>
-      <Typography variant="h5" gutterBottom>Credits</Typography>
-      <Grid container spacing={2}>
+    <Box sx={{ padding: "15px" }}>
+      <Typography variant="h5" gutterBottom>
+        Credits
+      </Typography>
+      <Slider {...settings}>
         {credits.map((cast, index) => (
-          cast ? ( // 确保 cast 不为空
-            <CreditItem key={cast.id || index} cast={cast} />
+          cast ? (
+            <Box key={cast.id || index} sx={{ padding: "10px" }}>
+              <CreditItem cast={cast} />
+            </Box>
           ) : null
         ))}
-      </Grid>
-    </div>
+        {/* 最后一个滑块：展示“更多演员” */}
+        <Box 
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height:"200px",
+            padding: "10px",
+          }}
+        >
+          <Button variant="contained" color="primary">
+            View More
+          </Button>
+        </Box>
+      </Slider>
+    </Box>
   );
 };
 
