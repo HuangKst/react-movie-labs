@@ -13,7 +13,7 @@ import AddMovieReviewPage from './pages/addMovieReviewPage'
 import UpcomingPage from "./pages/upcomingPage";
 import TopRatePage from "./pages/topRatePage";
 import CreditsPage from "./pages/creditsPage";
-
+import ListOfCreditsPage from "./pages/listOfCreditsPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,6 +41,7 @@ const App = () => {
             <Route path="/movies/upcoming" element={<UpcomingPage/>} />
             <Route path="/movies/top_rate" element={<TopRatePage/>}/>
             <Route path="/credits/:id" element={<CreditsPage/>} />
+            <Route path="/movies/:id/cast" element={<ListOfCreditsPage/>}/>
           </Routes>
         </MoviesContextProvider>
       </BrowserRouter>

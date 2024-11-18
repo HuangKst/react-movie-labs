@@ -6,14 +6,18 @@ import CreditItem from "../credits";
 import Button from "@mui/material/Button";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import { useNavigate } from "react-router-dom";
 
 
-const CreditsList = ({ credits }) => {
+const CreditsList = ({ credits ,movie}) => {
+  const navigate = useNavigate();
   if (!credits || credits.length === 0) {
     return (
       <Typography variant="body2">No cast information available.</Typography>
     );
   }
+
+  
 
   // React Slick settings
   const settings = {
@@ -67,7 +71,11 @@ const CreditsList = ({ credits }) => {
             padding: "10px",
           }}
         >
-          <Button variant="contained" color="primary">
+          <Button 
+          variant="contained" 
+          color="primary"  
+          onClick={() => navigate(`/movies/${movie.id}/cast`)}
+          >
             View More
           </Button>
         </Box>
