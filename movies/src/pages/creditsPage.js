@@ -4,6 +4,7 @@ import { getCreditDetails } from '../api/tmdb-api';
 import { useParams } from 'react-router-dom';
 import Spinner from '../components/spinner';
 import { useQuery } from "react-query";
+import CreditDetail from '../components/creditDetail';
 
 const CreditsPage = () => {
     const { id } = useParams();
@@ -22,8 +23,10 @@ const CreditsPage = () => {
           {credits ? (
             <>
               <CreditsSlider data={credits}>
-                
+                <CreditDetail credit={credits}/>
               </CreditsSlider>
+                
+              
             </>
           ) : (
             <p>Waiting for movie details</p>
