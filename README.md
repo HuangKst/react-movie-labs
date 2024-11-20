@@ -112,3 +112,47 @@ return (
   );
 ```
 
+#### 5.`CreditMovieCard` Component
+
+##### Feather **Description**
+
+Displays a single movie card, including the poster and title.
+
+##### **Implementation Details**
+
+- Maintains a consistent aspect ratio for movie posters.
+- Provides a clickable link for navigating to the movie's detail page.
+- Optimized to handle missing data gracefully.
+
+#### 6.`CreditMovieList` Component
+
+##### Feather **Description**:
+
+Displays a horizontally scrollable sliding window of movie cards using the `ImageList` in the mui.
+
+##### **Implementation Details**
+
+- Integrated a carousel for smooth horizontal scrolling.
+- Dynamically adjusts the visible number of movie cards based on screen size.
+- Each movie card is clickable, taking users to the movie detail page.
+
+```js
+        <Typography variant="h4" gutterBottom >
+        Known For
+        </Typography>
+        <ImageList
+        sx={{display: "flex",
+            flexWrap: "nowrap",
+            overflowX: "scroll",
+            gap: 10,
+            padding: "10px 0",}}
+            cols={movies.length}
+            rowHeight={250}
+        >
+            {movies.map((movie)=>(
+                <ImageListItem key={movie.id} sx={{flex:"0 0 auto "}}>
+                    <CreditMovieCard movie={movie}/>
+                </ImageListItem>
+            ))}
+        </ImageList>
+```
