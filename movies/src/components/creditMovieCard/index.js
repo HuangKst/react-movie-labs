@@ -1,11 +1,15 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+
 
 
 const creditMovieCard = ({movie})=>{
+
     if (!movie) return null; // 如果没有电影数据，不渲染
 
   return (
+    <Link to={`/movies/${movie.id}`} style={{ textDecoration: "none" }}>
     <Box sx={{ width: 150, textAlign: "center" }}>
       {/* 图片展示 */}
       <img
@@ -30,6 +34,8 @@ const creditMovieCard = ({movie})=>{
         {movie.title}
       </Typography>
     </Box>
+    </Link>
+    
   );
 
 }
