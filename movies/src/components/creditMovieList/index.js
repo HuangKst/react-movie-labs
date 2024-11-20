@@ -25,13 +25,9 @@ const CreditMovieList =({movies})=>{
                 {movies.map((movie)=>(
                     <ImageListItem key={movie.id} sx={{flex:"0 0 auto "}}>
                         <CreditMovieCard movie={movie}/>
-
                     </ImageListItem>
                 ))}
             </ImageList>
-
-
-
         </Box>
     );
 
