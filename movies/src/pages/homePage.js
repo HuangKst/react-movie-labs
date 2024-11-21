@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
 import AddToFavoritesIcon from '../components/cardIcons/addToFavorites'
 import { Pagination, Box, Typography } from '@mui/material';
-
+import Pagenation from '../components/pagination'
 const HomePage = (props) => {
 
   const [page, setPage] = useState(1);
@@ -42,26 +42,11 @@ const HomePage = (props) => {
         }}
       />
 
-<Box 
-        sx={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center', 
-          mt: 4 
-        }}
-      >
-        <Typography variant="subtitle1" gutterBottom>
-          Page: {page}
-        </Typography>
-        <Pagination
-          count={500} // The maximum number of pages available from the API
-          page={page}
-          onChange={handlePageChange}
-          color="primary"
-          shape="rounded"
-          variant="outlined"
+        <Pagenation
+        currentPage={page}
+        totalPages={500} // Example: Total pages from API
+        onPageChange={handlePageChange}
         />
-      </Box>
       
 
     </>
