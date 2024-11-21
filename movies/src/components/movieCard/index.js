@@ -15,20 +15,32 @@ import img from '../../images/film-poster-placeholder.png'
 import { Link } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import { MoviesContext } from "../../contexts/moviesContext";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+
 
 
 export default function MovieCard({ movie, action = () => {} }) {
-  const { favorites, addToFavorites } = useContext(MoviesContext);
+  
+  const { favorites, playList, addMovieToPlayList, removeFromWatchList } =
+    useContext(MoviesContext);
 
   if (favorites.find((id) => id === movie.id)) {
     movie.favorite = true;
   } else {
     movie.favorite = false
   }
+  const isInWatchList = playList.includes(movie.id);
 
-  const handleAddToFavorite = (e) => {
+
+
+  const handleToggleWatchList = (e) => {
     e.preventDefault();
-    addToFavorites(movie);
+    if (isInWatchList) {
+      removeFromWatchList(movie);
+    } else {
+      addMovieToPlayList(movie);
+    }
   };
 
   return (
@@ -40,6 +52,15 @@ export default function MovieCard({ movie, action = () => {} }) {
               <FavoriteIcon />
             </Avatar>
           ) : null
+        }
+        action={
+          <IconButton onClick={handleToggleWatchList}>
+            {isInWatchList ? (
+              <BookmarkIcon color="primary" />
+            ) : (
+              <BookmarkBorderIcon />
+            )}
+          </IconButton>
         }
         title={
           <Typography variant="h5" component="p">

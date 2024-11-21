@@ -4,8 +4,8 @@ import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
 import AddToFavoritesIcon from '../components/cardIcons/addToFavorites'
-import { Pagination, Box, Typography } from '@mui/material';
 import Pagenation from '../components/pagination'
+import PlayListAddIcon from "../components/cardIcons/playlistAdd";
 const HomePage = (props) => {
 
   const [page, setPage] = useState(1);
@@ -22,10 +22,6 @@ const HomePage = (props) => {
   }  
   const movies = data.results;
 
- 
-  const favorites = movies.filter(m => m.favorite)
-  localStorage.setItem('favorites', JSON.stringify(favorites))
-  const addToFavorites = (movieId) => true ;
 
   // Pagination Handlers
   const handlePageChange = (event, value) => {
@@ -37,8 +33,15 @@ const HomePage = (props) => {
       <PageTemplate
         title="Discover Movies"
         movies={movies}
-        action={(movie) => {
-          return <AddToFavoritesIcon movie={movie} />
+        action={(movie)=>{
+          return(
+            <div>
+                  <PlayListAddIcon movie={movie}/>
+                  <AddToFavoritesIcon movie={movie}/>
+            </div>
+          )
+                  
+  
         }}
       />
 

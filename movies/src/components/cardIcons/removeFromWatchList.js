@@ -8,7 +8,7 @@ const RemoveFromWatchListIcon = ({ movie }) => {
 
   const handleRemoveFromWatchList = (e) => {
     e.preventDefault();
-    context.removeFromFavorites(movie);
+    context.removeFromWatchList(movie);
   };
   return (
     <IconButton

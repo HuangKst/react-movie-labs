@@ -5,6 +5,7 @@ import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
 import PlayListAddIcon from "../components/cardIcons/playlistAdd";
 import PaginationComponent from "../components/pagination";
+import AddToFavoritesIcon from "../components/cardIcons/addToFavorites";
 
 const UpcomingPage = (props) => {
 
@@ -34,7 +35,14 @@ const UpcomingPage = (props) => {
       title="Upcoming Movies"
       movies={movies}
       action={(movie)=>{
-        return<PlayListAddIcon movie={movie}/>
+        return(
+          <div>
+                <PlayListAddIcon movie={movie}/>
+                <AddToFavoritesIcon movie={movie}/>
+          </div>
+        )
+                
+
       }}
      
       

@@ -25,9 +25,10 @@ const SiteHeader = ({ history }) => {
 
   const menuOptions = [
     { label: "Home", path: "/" },
-    { label: "Favorites", path: "/movies/favorites" },
     { label: "UPCOMING", path: "/movies/upcoming" },
     { label: "Top Rate", path: "/movies/top_rate" },
+    { label: "Favorites", path: "/movies/favorites" },
+    {label: "Watch List", path:"/movies/watchList"}
   ];
 
   const handleMenuSelect = (pageURL) => {
