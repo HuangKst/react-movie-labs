@@ -156,3 +156,127 @@ Displays a horizontally scrollable sliding window of movie cards using the `Imag
             ))}
         </ImageList>
 ```
+
+
+
+### Pagination Implement
+
+#### Features
+
+1. **Dynamic Data Fetching**: Fetch paginated data from an API using React Query.
+2. **Reusable Pagination Component**: A separate `PaginationComponent` for easy integration across multiple pages.
+3. **Material-UI Styled Controls**: Modern and responsive pagination controls with MUI.
+4. **Page State Management**: Maintains the current page state for easy navigation between pages.
+
+#### 1. Fetch Data with Pagination
+
+```js
+export const getMovies = (page = 1) => {
+  return fetch(
+    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&include_adult=false&include_video=false&page=${page}`
+  )
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+```
+
+- This function takes the `page` parameter and fetches data for the corresponding page from the API.
+- React Query is used to handle caching, loading states, and error handling.
+
+#### 2.Create the Reusable `PaginationComponent`
+
+```js
+import React from 'react';
+import { Pagination, Box, Typography } from '@mui/material';
+
+const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
+  return (
+    <Box 
+      sx={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        mt: 4 
+      }}
+    >
+      <Typography variant="subtitle1" gutterBottom>
+        Page: {currentPage}
+      </Typography>
+      <Pagination
+        count={totalPages} // Total number of pages
+        page={currentPage} // Current page
+        onChange={onPageChange} // Handler for page change
+        color="primary"
+        shape="rounded"
+        variant="outlined"
+      />
+    </Box>
+  );
+};
+
+export default PaginationComponent;
+
+```
+
+##### Key Props:
+
+- `currentPage`: The current page number.
+- `totalPages`: The total number of pages (e.g., fetched from the API).
+- `onPageChange`: Callback function triggered when the user changes the page.
+
+#### 3.Integrate Pagination in a Page
+
+```js
+const [page, setPage] = useState(1);
+
+  // Fetch movies with pagination
+  const { data, error, isLoading, isError } = useQuery(['discover', page], () => getMovies(page), {
+    keepPreviousData: true, 
+  });
+  
+  ...
+  
+  const handlePageChange = (_, value) => {
+    setPage(value);
+  }; 
+  ...
+  
+  <PaginationComponent
+        currentPage={page}
+        totalPages={500} // Example: Total pages from API
+        onPageChange={handlePageChange}
+      />
+  
+```
+
+##### Key Features:
+
+1. **State Management**:
+   - The `page` state keeps track of the current page number.
+   - When the user changes the page, `handlePageChange` updates the state.
+2. **React Query Integration**:
+   - The `useQuery` hook dynamically fetches data for the current page, caching results for faster navigation.
+3. **Pagination Display**:
+   - The `PaginationComponent` handles the display and navigation for pagination.
+
+#### 4. Usage in Other Pages
+
+```js
+<PaginationComponent
+  currentPage={currentPage} // State for the current page
+  totalPages={totalPages}   // Total number of pages from API
+  onPageChange={handlePageChange} // Page change handler
+/>
+
+```
+
