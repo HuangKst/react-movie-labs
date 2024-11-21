@@ -280,3 +280,148 @@ const [page, setPage] = useState(1);
 
 ```
 
+### Add the watch list page
+
+#### 1. Modify the `MoviesContxt`
+
+- Initialize the statement of the `playList`
+
+  ```js
+  const [playList, setPlayList] = useState([]);
+  ```
+
+- Add the `addMovieToPlayList`:add the movies to the WatchList
+
+  ```js
+  const addMovieToPlayList = (movie) => {
+    let newPlayList = [];
+    if (!playList.includes(movie.id)) {
+      newPlayList = [...playList, movie.id];
+    } else {
+      newPlayList = [...playList];
+    }
+    setPlayList(newPlayList);
+  };
+  
+  ```
+
+- Add the  `removeFromWatchList` :remove the movies from the WatchList
+
+  ```js
+  const removeFromWatchList = (movie) => {
+    setPlayList(playList.filter((mId) => mId !== movie.id));
+  };
+  
+  ```
+
+- Export the function 
+
+  ```js
+  <MoviesContext.Provider
+    value={{
+      playList,
+      addMovieToPlayList,
+      removeFromWatchList,
+      // others
+    }}
+  >
+    {props.children}
+  </MoviesContext.Provider>
+  
+  ```
+
+#### Create the `WatchListPage`
+
+- **Access Watchlist data using `MoviesContext`:** Use `useContext` to access the `playList` state from `MoviesContext`.
+
+  ```js
+  const { playList: movieIds } = useContext(MoviesContext);
+  ```
+
+- **Fetch movie details using `react-query`:** Use `react-query` to fetch details for each movie ID in the `playList`.
+
+  ```js
+  const watchListQueries = useQueries(
+    movieIds.map((movieId) => {
+      return {
+        queryKey: ["movie", { id: movieId }],
+        queryFn: getMovie,
+      };
+    })
+  );
+  ```
+
+- **Handle loading state:** Check if any query is still loading, and display a loading spinner.
+
+  ```js
+  const isLoading = watchListQueries.find((m) => m.isLoading === true);
+  if (isLoading) {
+    return <Spinner />;
+  }
+  
+  ```
+
+- **Transform movie data:** Convert the `genres` data to `genre_ids` to match the required format for other components.
+
+  ```js
+  const movies = watchListQueries
+    .filter((q) => q.data)
+    .map((q) => {
+      q.data.genre_ids = q.data.genres.map((g) => g.id);
+      return q.data;
+    });
+  
+  ```
+
+- **Render the page:** Use `PageTemplate` to display movies and add action buttons (e.g., remove from Watchlist).
+
+  ```js
+  return (
+    <PageTemplate
+      title="Watchlist Movies"
+      movies={movies}
+      action={(movie) => {
+        return <RemoveFromWatchListIcon movie={movie} />;
+      }}
+    />
+  );
+  
+  ```
+
+#### Update `MovieCard` to Show Watchlist Icon
+
+- **Check Watchlist state:** In `MovieCard`, check if the current movie is in the `playList`.
+
+  ```js
+  const isInWatchList = playList.includes(movie.id);
+  
+  ```
+
+- **Display Watchlist icon:** Dynamically show an icon (a bookmark) based on the movie's Watchlist status.
+
+  ```js
+  <IconButton onClick={handleToggleWatchList}>
+    {isInWatchList ? (
+      <BookmarkIcon color="primary" />
+    ) : (
+      <BookmarkBorderIcon />
+    )}
+  </IconButton>
+  
+  ```
+
+- **Add toggle logic:** When the icon is clicked, add or remove the movie from the Watchlist.
+
+  ```js
+  const handleToggleWatchList = (e) => {
+    e.preventDefault();
+    if (isInWatchList) {
+      removeFromWatchList(movie);
+    } else {
+      addMovieToPlayList(movie);
+    }
+  };
+  
+  ```
+
+  
