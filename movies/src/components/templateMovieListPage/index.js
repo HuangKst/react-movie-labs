@@ -8,18 +8,31 @@ function MovieListPageTemplate({ movies, title, action = () => {} }) {
   const [nameFilter, setNameFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("0");
   const genreId = Number(genreFilter);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
   let displayedMovies = movies
-    .filter((m) => {
-      return m.title.toLowerCase().search(nameFilter.toLowerCase()) !== -1;
-    })
-    .filter((m) => {
-      return genreId > 0 ? m.genre_ids.includes(genreId) : true;
-    });
+  .filter((m) => {
+    return m.title.toLowerCase().search(nameFilter.toLowerCase()) !== -1;
+  })
+  .filter((m) => {
+    return genreId > 0 ? m.genre_ids.includes(genreId) : true;
+  })
+  .filter((m) => {
+    const releaseDate = new Date(m.release_date);
+    const from = fromDate ? new Date(fromDate) : null;
+    const to = toDate ? new Date(toDate) : null;
+    return (
+      (!from || releaseDate >= from) &&
+      (!to || releaseDate <= to)
+    );
+  });
 
   const handleChange = (type, value) => {
     if (type === "name") setNameFilter(value);
-    else setGenreFilter(value);
+    else if (type === "genre") setGenreFilter(value);
+    else if (type === "fromDate") setFromDate(value);
+    else if (type === "toDate") setToDate(value);
   };
 
   return (
