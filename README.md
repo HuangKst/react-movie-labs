@@ -424,4 +424,82 @@ const [page, setPage] = useState(1);
   
   ```
 
+
+### Add the filter card
+
+#### 1. Add the data release
+
+- **Add `fromDate` and `toDate` inputs:** Use `TextField` components to create date pickers for the "From Date" and "To Date" filters.
+
+```js
+<Typography variant="h6" component="h2" sx={{ marginTop: 2 }}>
+  Filter by Release Date:
+</Typography>
+<TextField
+  sx={{ ...formControl }}
+  id="from-date"
+  label="From"
+  type="date"
+  InputLabelProps={{ shrink: true }}
+  onChange={(e) => handleDateChange(e, "fromDate")}
+/>
+<TextField
+  sx={{ ...formControl }}
+  id="to-date"
+  label="To"
+  type="date"
+  InputLabelProps={{ shrink: true }}
+  onChange={(e) => handleDateChange(e, "toDate")}
+/>
+
+```
+
+- **Pass the selected dates to the parent component:** Add event handlers for the date inputs to send the selected dates (`fromDate` and `toDate`) to the parent using `onUserInput`.
+
+  ```js
+  const handleDateChange = (e, type) => {
+    handleChange(e, type, e.target.value);
+  };
   
+  ```
+
+- #### Update the `MovieListPageTemplate` Component
+
+  - **Add `fromDate` and `toDate` states:** Manage the state for the release date range in the parent component.
+
+    ```
+    js复制代码const [fromDate, setFromDate] = useState("");
+    const [toDate, setToDate] = useState("");
+    ```
+
+  - **Modify the filtering logic:** Add a condition to filter movies by release date. Check if the movie's release date falls within the selected range.
+
+    ```js
+    js复制代码let displayedMovies = movies
+      .filter((m) => {
+        return m.title.toLowerCase().search(nameFilter.toLowerCase()) !== -1;
+      })
+      .filter((m) => {
+        return genreId > 0 ? m.genre_ids.includes(genreId) : true;
+      })
+      .filter((m) => {
+        const releaseDate = new Date(m.release_date);
+        const from = fromDate ? new Date(fromDate) : null;
+        const to = toDate ? new Date(toDate) : null;
+        return (
+          (!from || releaseDate >= from) &&
+          (!to || releaseDate <= to)
+        );
+      });
+    ```
+
+  - **Handle date changes:** Update `fromDate` and `toDate` states based on user input.
+
+    ```js
+    js复制代码const handleChange = (type, value) => {
+      if (type === "name") setNameFilter(value);
+      else if (type === "genre") setGenreFilter(value);
+      else if (type === "fromDate") setFromDate(value);
+      else if (type === "toDate") setToDate(value);
+    };
+    ```
