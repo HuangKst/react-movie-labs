@@ -10,6 +10,7 @@ function MovieListPageTemplate({ movies, title, action = () => {} }) {
   const genreId = Number(genreFilter);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [rateOrder, setRateOrder] = useState("asc");
 
   let displayedMovies = movies
   .filter((m) => {
@@ -26,13 +27,19 @@ function MovieListPageTemplate({ movies, title, action = () => {} }) {
       (!from || releaseDate >= from) &&
       (!to || releaseDate <= to)
     );
+  })
+  .sort((a, b) => {
+    if (rateOrder === "asc") return a.vote_average - b.vote_average;
+    else return b.vote_average - a.vote_average;
   });
+;
 
   const handleChange = (type, value) => {
     if (type === "name") setNameFilter(value);
     else if (type === "genre") setGenreFilter(value);
     else if (type === "fromDate") setFromDate(value);
     else if (type === "toDate") setToDate(value);
+    else if (type === "rateOrder") setRateOrder(value);;
   };
 
   return (
@@ -50,6 +57,7 @@ function MovieListPageTemplate({ movies, title, action = () => {} }) {
             onUserInput={handleChange}
             titleFilter={nameFilter}
             genreFilter={genreFilter}
+            rateOrder={rateOrder}
           />
         </Grid>
         <MovieList action={action} movies={displayedMovies}></MovieList>

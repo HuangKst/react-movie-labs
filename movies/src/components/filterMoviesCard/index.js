@@ -52,6 +52,9 @@ export default function FilterMoviesCard(props) {
   const handleDateChange = (e, type) => {
     handleChange(e, type, e.target.value);
   };
+  const handleRateChange=(e,type)=>{
+    handleChange(e,"rateOrder",e.target.value);
+  }
 
   return (
     <Card 
@@ -110,19 +113,29 @@ export default function FilterMoviesCard(props) {
           InputLabelProps={{ shrink: true }}
           onChange={(e) => handleDateChange(e, "toDate")}
         />
+
+        <Typography variant="h6" component="h2" sx={{ marginTop: 2 }}>
+          Sort by Rating:
+        </Typography>
+        <FormControl sx={{ ...formControl }}>
+          <InputLabel id="rate-label">Rate</InputLabel>
+          <Select
+            labelId="rate-label"
+            id="rate-select"
+            value={props.rateOrder}
+            onChange={handleRateChange}
+          >
+            <MenuItem value="asc">Ascending</MenuItem>
+            <MenuItem value="desc">Descending</MenuItem>
+          </Select>
+        </FormControl>
       </CardContent>
       <CardMedia
-        sx={{ height: 300 }}
+        sx={{ height: 200 }}
         image={img}
         title="Filter"
       />
-      <CardContent>
-        <Typography variant="h5" component="h1">
-          <SearchIcon fontSize="large" />
-          Filter the movies.
-          <br />
-        </Typography>
-      </CardContent>
+      
     </Card>
   );
 }
