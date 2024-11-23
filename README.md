@@ -1,5 +1,7 @@
 # react-movie-labs
 
+Youtube DEMO:
+
 
 
 ## Extend the App
@@ -496,10 +498,251 @@ const [page, setPage] = useState(1);
   - **Handle date changes:** Update `fromDate` and `toDate` states based on user input.
 
     ```js
-    js复制代码const handleChange = (type, value) => {
+    const handleChange = (type, value) => {
       if (type === "name") setNameFilter(value);
       else if (type === "genre") setGenreFilter(value);
       else if (type === "fromDate") setFromDate(value);
       else if (type === "toDate") setToDate(value);
     };
     ```
+
+#### 2 . Add the rate sort 
+
+**Add In the `TemplateMovieListPage`**
+
+```
+const [rateOrder, setRateOrder] = useState("asc");
+
+.sort((a, b) => {
+    if (rateOrder === "asc") return a.vote_average - b.vote_average;
+    else return b.vote_average - a.vote_average;
+  });
+  
+const handleChange = (type, value) => {
+   ...
+    else if (type === "rateOrder") setRateOrder(value);;
+  };
+  
+<FilterCard
+            ...
+            rateOrder={rateOrder}
+          />
+```
+
+**Add in the `FilterMovieCard`**
+
+```js
+const handleRateChange=(e,type)=>{
+    handleChange(e,"rateOrder",e.target.value);
+  }
+
+...
+
+<Typography variant="h6" component="h2" sx={{ marginTop: 2 }}>
+          Sort by Rating:
+        </Typography>
+        <FormControl sx={{ ...formControl }}>
+          <InputLabel id="rate-label">Rate</InputLabel>
+          <Select
+            labelId="rate-label"
+            id="rate-select"
+            value={props.rateOrder}
+            onChange={handleRateChange}
+          >
+            <MenuItem value="asc">Ascending</MenuItem>
+            <MenuItem value="desc">Descending</MenuItem>
+          </Select>
+        </FormControl>
+```
+
+
+
+
+
+### Add the Login Page use the firebase
+
+#### 1.Initialize the firebase
+
+We need to install firebase in our react app
+
+```bash
+npm install firebase
+```
+
+-  Import the Firebase modules you need
+
+  ```js
+  import { initializeApp } from "firebase/app";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+  ```
+
+- web app's Firebase configuration
+
+  ```js
+  const firebaseConfig = {
+      apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+      authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+      storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+      appId: process.env.REACT_APP_FIREBASE_APP_ID,
+      measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
+  };
+  ```
+
+- Initialize Firebase
+
+  ```js
+  const app = initializeApp(firebaseConfig);
+  ```
+
+- Initialize Firebase Authentication
+
+  ```js
+  export const auth = getAuth(app);
+  ```
+
+- Google Auth Provider
+
+  ```js
+  export const googleProvider = new GoogleAuthProvider();
+  ```
+
+- Function to handle Google Sign-In
+
+  ```js
+  export const signInWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user; // Get signed-in user's information
+      console.log("User Info:", user);
+      return user;
+    } catch (error) {
+      console.error("Error during Google Sign-In:", error);
+      throw error;
+    }
+  };
+  ```
+
+- Function to handle Sign-Out
+
+  ```js
+  export const logout = async () => {
+    try {
+      await signOut(auth);
+      console.log("User signed out");
+    } catch (error) {
+      console.error("Error during Sign-Out:", error);
+    }
+  };
+  ```
+
+#### 2. set the gobal value in the `moviesContext`
+
+```js
+const [user, setUser] = useState(null);
+
+return (
+    <MoviesContext.Provider
+      value={{
+       .....
+        user,
+        setUser
+       
+      }}
+```
+
+#### 3. Create the login page 
+
+- The function allows users to log in to the application using their Google account.
+
+- Once the user successfully logs in, it updates the application state with the user’s information and navigates to the "Home" page.
+
+  ```js
+  const handleGoogleLogin = async () => {
+      try {
+        const loggedInUser = await signInWithGoogle();
+        setUser(loggedInUser);
+        navigate("/home"); // Redirect to HomePage after login
+      } catch (error) {
+        console.error("Error during Google Sign-In:", error);
+      }
+    };
+  ```
+
+- The function allows the user to log out of the application.
+
+- It clears the user's authentication session and updates the application state to reflect that no user is currently logged in.
+
+  ```js
+  const handleLogout = async () => {
+      try {
+        await logout();
+        setUser(null);
+      } catch (error) {
+        console.error("Error during Sign-Out:", error);
+      }
+    };
+  ```
+
+#### 4.Add the user icon in the siteHeader 
+
+```
+const handleAvatarClick = () => {
+    navigate("/login"); // jump to the login page 
+  };
+....
+
+{user && (
+            <IconButton onClick={handleAvatarClick}>
+              <Avatar src={user.photoURL} alt={user.displayName}>
+                {user.displayName.charAt(0)}
+              </Avatar>
+            </IconButton>
+          )}
+```
+
+#### 5. Update the `index.js` 
+
+In order to show the login page without the siterheader 
+
+```js
+const Layout = () => {
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/"; // check the current location 
+
+  return (
+    <>
+      {!isLoginPage && <SiteHeader />} {/* if not login page show SiteHeader */}
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
+        <Route path="/reviews/:id" element={<MovieReviewPage />} />
+        <Route path="/movies/:id" element={<MoviePage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/reviews/form" element={<AddMovieReviewPage />} />
+        <Route path="/movies/upcoming" element={<UpcomingPage />} />
+        <Route path="/movies/top_rate" element={<TopRatePage />} />
+        <Route path="/credits/:id" element={<CreditsPage />} />
+        <Route path="/movies/:id/cast" element={<ListOfCreditsPage />} />
+        <Route path="/movies/watchList" element={<WatchListPage />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </>
+  );
+};
+
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <MoviesContextProvider>
+          <Layout /> {/* put Layout into BrowserRouter inside */}
+        </MoviesContextProvider>
+      </BrowserRouter>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  );
+};
+```
+
