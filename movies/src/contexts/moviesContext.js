@@ -6,6 +6,9 @@ const MoviesContextProvider = (props) => {
   const [favorites, setFavorites] = useState( [] )
   const [myReviews, setMyReviews] = useState( {} ) 
   const [playList, setPlayList] = useState([])
+  const [user, setUser] = useState(null);
+
+  
   
 
   const addReview = (movie, review) => {
@@ -53,6 +56,8 @@ const MoviesContextProvider = (props) => {
 
   }
 
+
+  
   return (
     <MoviesContext.Provider
       value={{
@@ -62,7 +67,10 @@ const MoviesContextProvider = (props) => {
         addReview,
         addMovieToPlayList,
         playList,
-        removeFromWatchList
+        removeFromWatchList,
+        user,
+        setUser
+       
       }}
     >
       {props.children}

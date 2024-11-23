@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useContext} from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -11,10 +11,13 @@ import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { MoviesContext } from "../../contexts/moviesContext";
+import Avatar from "@mui/material/Avatar";
 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
 const SiteHeader = ({ history }) => {
+  const { user } = useContext(MoviesContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -24,7 +27,7 @@ const SiteHeader = ({ history }) => {
   const navigate = useNavigate();
 
   const menuOptions = [
-    { label: "Home", path: "/" },
+    { label: "Home", path: "/home" },
     { label: "UPCOMING", path: "/movies/upcoming" },
     { label: "Top Rate", path: "/movies/top_rate" },
     { label: "Favorites", path: "/movies/favorites" },
@@ -37,6 +40,10 @@ const SiteHeader = ({ history }) => {
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleAvatarClick = () => {
+    navigate("/login"); // 跳转到登录页面
   };
 
   return (
@@ -98,6 +105,13 @@ const SiteHeader = ({ history }) => {
                 ))}
               </>
             )}
+            {user && (
+            <IconButton onClick={handleAvatarClick}>
+              <Avatar src={user.photoURL} alt={user.displayName}>
+                {user.displayName.charAt(0)}
+              </Avatar>
+            </IconButton>
+          )}
         </Toolbar>
       </AppBar>
       <Offset />
