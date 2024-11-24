@@ -1,7 +1,7 @@
 import React, { useContext} from "react";
 import { signInWithGoogle, logout } from "../firebase";
 import { useNavigate } from "react-router-dom"; // For navigation
-import { Card, CardContent, Avatar, Typography, Button, Box } from "@mui/material";
+import {  Avatar, Typography, Button, Box } from "@mui/material";
 import { MoviesContext } from "../contexts/moviesContext";
 import backgroundImage from "../images/login-page.jpg"
 const LoginPage = () => {
